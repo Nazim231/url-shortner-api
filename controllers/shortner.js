@@ -26,12 +26,16 @@ class ShortnerController {
         const realURL = req.body.url;
         // if no url is provided for getting shorted
         if (!realURL) {
-            return res.status(400).json({ error: "URL is required" });
+            return res.status(400).render("dashboard", {
+                error: 'URL is required'
+            });
+            //return res.status(400).json({ error: "URL is required" });
         }
         // generating a random 8 characters long string
         // shortURL string is treated as abbreviation/redirection
         // link to original URL
         const shortURL = nanoid(8);
+        console.log(shortURL);
         // preparing the data of new short url to insert in server
         const data = {
             shortURL: shortURL,
@@ -43,13 +47,19 @@ class ShortnerController {
         const result = await shortner.create(data);
         // returning the result
         if (result) {
-            return res.json({
-                message: "Short URL Generated",
-                shortURL: shortURL
-            });
+            // return res.json({
+            //     message: "Short URL Generated",
+            //     shortURL: shortURL
+            // });
+            return res.render("dashboard", {
+                success: shortURL
+            })
         } else {
-            return res.status(500).json({
-                message: "Failed to generate URL, try again"
+            // return res.status(500).json({
+            //     message: "Failed to generate URL, try again"
+            // });
+            return res.render("dashboard", {
+                error: "Failed to generate URL, try again"
             });
         }
     }
@@ -74,12 +84,13 @@ class ShortnerController {
         }).then((data) => {
             // if short URL doesn't exists in the Server
             if (!data) {
+                console.log(data);
                 return res.status(404).json({ message: "Link doesn't exist" })
             }
             // fetching and redirecting to the original URL
             const realURL = data.realURL;
             if (realURL) {
-                return res.redirect(realURL);
+                return res.redirect(`http://${realURL}`);
             } else {
                 return res.status(400).json({ message: "No Redirection URL Found" });
             }

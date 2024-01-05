@@ -4,7 +4,7 @@ const schema = new Schema({
     shortURL: {
         type: String,
         required: true,
-        unique: true,
+        // unique: true,
     },
     realURL: {
         type: String,

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortner</title>
+</head>
+<body>
+    <h2>URL Shortner</h2>
+    <%# If any error occured show the error %>
+    <% if (locals.error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+    <form action="/url/" method="post">
+        <label for="orignal-url">Enter an URL</label>
+        <input type="text" name="url" id="url">
+        <input type="submit" value="Generate Short Link">
+    </form>
+    <%# If Link is generated show the link %>
+    <% if (locals.success) { %>
+        <h3>Link Generated: http://localhost:8000/url/<%= success %></h3>
+    <% } %>
+</body>
+</html>
