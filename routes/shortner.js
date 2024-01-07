@@ -9,5 +9,3 @@ Router.route("/api/:url")
     .get(shortnerController.getURLAnalytics);
 
 Router.post("/", shortnerController.generateShortURL);
-
-Router.get("/:shortURL", shortnerController.redirectToRealURL);

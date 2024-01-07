@@ -35,7 +35,6 @@ class ShortnerController {
         // shortURL string is treated as abbreviation/redirection
         // link to original URL
         const shortURL = nanoid(8);
-        console.log(shortURL);
         // preparing the data of new short url to insert in server
         const data = {
             shortURL: shortURL,
@@ -84,7 +83,6 @@ class ShortnerController {
         }).then((data) => {
             // if short URL doesn't exists in the Server
             if (!data) {
-                console.log(data);
                 return res.status(404).json({ message: "Link doesn't exist" })
             }
             // fetching and redirecting to the original URL
