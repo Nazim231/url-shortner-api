@@ -1,15 +1,28 @@
-class Auth {
-    
-    #userMap = new Map();
+import JWT from "jsonwebtoken";
 
-    createUser(id, user) {
-        this.#userMap.set(id, user);
-        console.log(this.getUser(id));
+const { sign, verify } = JWT;
+const secretKey = "*c<o6#[/&(9wK=eCk<3a_sGpjWvBbg3<I6;=#RZ8)9a}cE6IC9crgJd&QZB4[!";
+
+class Auth {
+
+    createUser(user) {
+
+        const userData = {
+            _id: user._id,
+            email: user.email,
+            password: user.password
+        }
+        
+        return sign(userData, secretKey);
     }
 
-    getUser(id) {
-        const user = this.#userMap.get(id);
-        console.log("User: ", user);
+    getUser(token) {
+        let user;
+        try {
+            user = verify(token, secretKey);
+        } catch {
+            user = null;
+        }
         return user;
     }
 }

@@ -1,3 +1,5 @@
+import { shortner } from "../models/shortner.js";
+
 class StaticController {
 
     home(req, res) {
@@ -12,8 +14,10 @@ class StaticController {
         res.render("signup");
     }
 
-    dashboard(req, res) {
-        res.render("dashboard");
+    async dashboard(req, res) {
+        const userId = req.user._id;
+        const urls = await shortner.find({ createdBy: userId });
+        res.render("dashboard", {urls: urls});
     }
 }
 

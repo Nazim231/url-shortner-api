@@ -5,3 +5,4 @@ export const Router = Express.Router();
 
 Router.post("/login", userController.login);
 Router.post("/signup", userController.signup);
+Router.get("/logout", userController.logout);

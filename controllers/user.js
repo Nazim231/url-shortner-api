@@ -1,5 +1,4 @@
 import { user as users } from "../models/user.js";
-import { v4 as createToken } from "uuid";
 import { auth } from "../services/auth.js";
 
 class User {
@@ -15,8 +14,7 @@ class User {
             return res.render("login", { error: "Invalid Email or Password" });
         }
         // generating and assigning token to the current user
-        const sessionId = createToken();
-        auth.createUser(sessionId, user);
+        const sessionId = auth.createUser(user);
         // sending the token in cookie to the client
         res.cookie("uid", sessionId);
         // redirecting user to the home page
@@ -44,14 +42,18 @@ class User {
         if (newUser) {
             // User Created
             //// generate token and allow user to create links
-            const sessionId = createToken();
-            auth.createUser(sessionId, newUser);
+            const sessionId = auth.createUser(newUser);
             res.cookie("uid", sessionId);
             return res.redirect("/dashboard");
         } else {
             // Failed to create user
             return res.render("signup", { error: "Failed to create user, please try again" });
         }
+    }
+
+    logout(req, res) {
+        res.clearCookie("uid")
+        return res.redirect("/");
     }
 
 }

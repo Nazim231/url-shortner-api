@@ -6,7 +6,10 @@
     <title>URL Shortner</title>
 </head>
 <body>
-    <h2>URL Shortner</h2>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2>URL Shortner</h2>
+        <a href="/user/logout">Logout</a>
+    </div>
     <%# If any error occured show the error %>
     <% if (locals.error) { %>
         <p style="color: red;"><%= error %></p>
@@ -20,5 +23,24 @@
     <% if (locals.success) { %>
         <h3>Link Generated: http://localhost:8000/<%= success %></h3>
     <% } %>
+
+    <table cellpadding="8" border="2" style="margin-top: 2rem; text-align: center;">
+        <thead>
+            <th>S. No</th>
+            <th>Short URL</th>
+            <th>Redirect To</th>
+            <th>Clicks</th>
+        </thead>
+        <tbody>
+            <% locals.urls.forEach((url, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= url.shortURL %></td>
+                    <td><%= url.realURL %></td>
+                    <td><%= url.visitHistory.length %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
 </body>
 </html>

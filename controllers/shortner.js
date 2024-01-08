@@ -35,15 +35,18 @@ class ShortnerController {
         // shortURL string is treated as abbreviation/redirection
         // link to original URL
         const shortURL = nanoid(8);
+        const userId = req.user._id;
         // preparing the data of new short url to insert in server
         const data = {
             shortURL: shortURL,
             realURL: realURL,
-            visitHistory: []
+            visitHistory: [],
+            createdBy: userId,
         };
 
         // adding the document to the server
         const result = await shortner.create(data);
+        const urls = await shortner.find({ createdBy:  userId});
         // returning the result
         if (result) {
             // return res.json({
@@ -51,14 +54,16 @@ class ShortnerController {
             //     shortURL: shortURL
             // });
             return res.render("dashboard", {
-                success: shortURL
+                success: shortURL,
+                urls: urls
             })
         } else {
             // return res.status(500).json({
             //     message: "Failed to generate URL, try again"
             // });
             return res.render("dashboard", {
-                error: "Failed to generate URL, try again"
+                error: "Failed to generate URL, try again",
+                urls: urls
             });
         }
     }
@@ -73,11 +78,11 @@ class ShortnerController {
             shortURL: shortURL
         }, {
             /*
-             * adding the current time to the "visitHistory"
-             * attribute of current document, using $push 
-             * because the visitHistory is an array, and 
-             * we need to add new current date as an element to
-             * this attribute
+              adding the current time to the "visitHistory"
+              attribute of current document, using $push 
+              because the visitHistory is an array, and 
+              we need to add new current date as an element to
+              this attribute
             */
             $push: { visitHistory: { timestamp: Date.now() } }
         }).then((data) => {
